@@ -3,10 +3,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title> Welcome  to devops   </title>
+<title> Welcome  to devops, Hello this page is displayed using docker   </title>
 <style>
   body {
-    background-color: grey;
+    background-color: blue;
   }
 </style>
 </head>
