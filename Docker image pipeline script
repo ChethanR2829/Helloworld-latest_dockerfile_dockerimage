@@ -1,0 +1,64 @@
+pipeline {
+    agent { label "slave_2" }
+    
+    triggers{
+        pollSCM('* * * * *')
+    }
+
+    stages {
+        stage('clone project') {
+            steps {
+                echo 'clonning project to slave_2'
+                git branch: 'main', url: 'https://github.com/ChethanR2829/Helloworld-latest_dockerfile_dockerimage.git'
+            }
+        }
+        stage('build project') {
+            steps {
+                echo 'build project'
+                sh 'yum install maven -y'
+                sh 'mvn clean package'
+            }
+        }
+        stage('dockerbuild') {
+            steps {
+                echo 'docker build image'
+                sh 'docker build -t chethandockerimage .'
+            }
+        }
+        stage('login') {
+            steps {
+                echo 'login to docker hub'
+                sh 'docker login -u chethanramesh -p chethan@2819'
+            }
+        }
+        stage('Tag') {
+            steps {
+                echo 'Tag image give alias name'
+                sh 'docker tag chethandockerimage chethanramesh/chethandockerimage'
+                
+            }
+        }
+        stage('upload-dockerhub') {
+            steps {
+                echo 'Push image to docker hub'
+                sh 'docker push chethanramesh/chethandockerimage'
+                
+            }
+        }
+        stage('Remove previous container') {
+            steps {
+                echo 'Remove previous container'
+                sh 'docker stop project_vinod_conatiner || true'
+                sh 'docker rm project_vinod_conatiner || true'
+                
+            }
+        }
+        stage('Run') {
+            steps {
+                echo 'run in port 8181'
+                sh 'docker run --name project_vinod_conatiner -d -p 8181:8080 chethanramesh/chethandockerimage'
+                
+            }
+        }
+    }
+}
