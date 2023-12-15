@@ -6,7 +6,7 @@
 <title> Welcome  to devops, Hello this page is displayed using docker   </title>
 <style>
   body {
-    background-color: blue;
+    background-color: white;
   }
 </style>
 </head>
